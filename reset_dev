@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# qa_release make the same as master branch
+
+# here are the steps
+# this script stashes current state, remembers current branch to checkout back
+# then makes qa_release branch the same as master branch by adding 1 commit on top of qa_release
+# the diff calculated on another branch(temp_qa), creates revert commit and cherry-picks that revert
+# commit to qa_relase branch with message <Revert "master-dev diff">
+
+
 cd ~/hydra
 
 # getting and saving current state
