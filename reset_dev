@@ -1,0 +1,58 @@
+#!/bin/bash
+
+cd ~/test
+
+# getting and saving current state
+current_branch="$(git branch | grep \* | cut -d ' ' -f2)"
+git add -A
+stashed="$(git stash)"
+
+echo $stashed
+echo $current_branch
+
+# set bash option to log running commands
+set -x
+trap read debug
+# fetch remote state to master and qa_release
+git checkout master
+git pull
+git checkout qa_release
+git pull
+
+# move master changes into qa_release
+git merge master -Xtheirs
+
+# create temp branch from current master state
+git checkout master
+git branch -D tmp_qa
+git checkout -b tmp_qa
+
+# fetch qa_release diff over master, sqaush to one commit
+git merge --squash qa_release
+git commit -a -m 'master-dev diff'
+
+# create revert commit of diff on top of temp branch, this is opposite of qa_release diff with master
+git revert tmp_qa --no-edit
+
+# move back to qa_release
+git checkout qa_release
+
+# cherry-pick qa_release-master diff opposite commit
+git cherry-pick tmp_qa
+
+# here we have qa_release same as master, push to remote
+git push 
+
+# go back to branch we were on
+git checkout $current_branch
+
+# delete temp branch
+git branch -D tmp_qa
+
+# turn off running commands logging
+set +x
+
+# check if we stashed something pop it back
+if [[ $stashed != 'No local changes to save' ]]; then
+	git stash pop
+fi
