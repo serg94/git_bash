@@ -24,9 +24,9 @@ set -x
 trap read debug
 # fetch remote state to master and qa_release
 git checkout master
-git pull
+git pull --no-edit
 git checkout qa_release
-git pull
+git pull -X theirs --no-edit
 
 # move master changes into qa_release
 git merge master -Xtheirs
