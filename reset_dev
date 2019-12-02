@@ -6,7 +6,7 @@
 # this script stashes current state, remembers current branch to checkout back
 # then makes qa_release branch the same as master branch by adding 1 commit on top of qa_release
 # the diff calculated on another branch(temp_qa), creates revert commit and cherry-picks that revert
-# commit to qa_relase branch with message <Revert "master-dev diff">
+# commit to qa_release branch with message <Revert "master-dev diff">
 
 
 cd ~/hydra
@@ -15,9 +15,6 @@ cd ~/hydra
 current_branch="$(git branch | grep \* | cut -d ' ' -f2)"
 git add -A
 stashed="$(git stash)"
-
-echo $stashed
-echo $current_branch
 
 # set bash option to log running commands
 set -x
