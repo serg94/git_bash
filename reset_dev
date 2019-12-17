@@ -26,7 +26,7 @@ git checkout qa_release
 git pull -X theirs --no-edit
 
 # move master changes into qa_release
-git merge master -Xtheirs
+git merge master -Xtheirs --no-edit
 
 # create temp branch from current master state
 git checkout master
