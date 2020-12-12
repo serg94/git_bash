@@ -17,8 +17,9 @@ git add -A
 stashed="$(git stash)"
 
 # set bash option to log running commands
-set -x
-trap read debug
+#set -x
+#trap read debug
+
 # fetch remote state to master and qa_release
 git checkout master
 git pull --no-edit
@@ -56,7 +57,7 @@ git checkout $current_branch
 git branch -D tmp_qa
 
 # turn off running commands logging
-set +x
+# set +x
 
 # check if we stashed something pop it back
 if [[ $stashed != 'No local changes to save' ]]; then
